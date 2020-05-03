@@ -40,7 +40,7 @@ For other environments like Cygwin please download the source code and compile i
 ### ssh-sk-helper.exe
 
 Copy `ssh-sk-helper.exe` into `/usr/lib/ssh`. You can either rename the original file in that directory or rename this one into something else before copying.
-Remember if you just replace the original `ssh-sk-helper.exe` it might be replaced with the original one later when you update your components(i.e. with MinGW updater, pacman, Cygwin updater, or updating "Git for Windows"). Also always create a backup of original compoenents if you are going to replace them.
+Remember if you just replace the original `ssh-sk-helper.exe` it might be replaced with the original one later when you update your components(i.e. with MinGW updater, pacman, Cygwin updater, or updating "Git for Windows"). Also always create a backup of original components if you are going to replace them.
 
 ### winhello.dll
 
@@ -54,7 +54,7 @@ Download OpenSSH 8.2p1 source code and apply the provided patch to it:
 
 ```bash
 cd openssh-source
-patch ssh-sk-helper.patch
+patch -p1 < ssh-sk-helper.patch
 ```
 
 Then compile it according to your environment instructions.
