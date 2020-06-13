@@ -2,7 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <wchar.h>
-#define NOCRYPT
+#include <string.h>
+#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <openssl/evp.h>
 #include <openssl/bn.h>
@@ -10,8 +11,9 @@
 
 #include "sk-api.h"
 #include "webauthn/webauthn.h"
-
-#define SK_DEBUG 1
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif //HAVE_CONFIG_H
 
 typedef DWORD (*TWebAuthNGetApiVersionNumber)();
 typedef HRESULT (*TWebAuthNIsUserVerifyingPlatformAuthenticatorAvailable)(BOOL *);
@@ -76,11 +78,13 @@ static int init_winhello()
 		return -1;
 	}
 	BOOL user = 0;
-	if (webAuthNGetApiVersionNumber() >= 1 && webAuthNIsUserVerifyingPlatformAuthenticatorAvailable(&user) == 0 && user == 1)
+	int isUserAvailable = webAuthNIsUserVerifyingPlatformAuthenticatorAvailable(&user);
+	if (webAuthNGetApiVersionNumber() >= 1 && isUserAvailable == 0 && user == 1)
 	{
 		loaded = 1;
 		return 0;
 	}
+	skdebug(__func__, "WinHello API Error: Version=%u, Is user available=%d, user=%d", webAuthNGetApiVersionNumber(), isUserAvailable, user);
 	return -1;
 }
 
@@ -270,8 +274,7 @@ int sk_enroll(uint32_t alg, const uint8_t *challenge, size_t challenge_len, cons
 
 	WEBAUTHN_CLIENT_DATA WebAuthNClientData = {WEBAUTHN_CLIENT_DATA_CURRENT_VERSION, challenge_len, (uint8_t *)challenge, WEBAUTHN_HASH_ALGORITHM_SHA_256};
 
-	//TODO: check how to invoke TPM
-	WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS WebAuthNCredentialOptions = {WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_CURRENT_VERSION, 60000, {0, NULL}, {0, NULL}, WEBAUTHN_AUTHENTICATOR_ATTACHMENT_ANY, flags & SSH_SK_RESIDENT_KEY, WEBAUTHN_USER_VERIFICATION_REQUIREMENT_PREFERRED, WEBAUTHN_ATTESTATION_CONVEYANCE_PREFERENCE_INDIRECT, 0, NULL, NULL};
+	WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS WebAuthNCredentialOptions = {WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_CURRENT_VERSION, 60000, {0, NULL}, {0, NULL}, WEBAUTHN_AUTHENTICATOR_ATTACHMENT_ANY, flags & SSH_SK_RESIDENT_KEY, WEBAUTHN_USER_VERIFICATION_REQUIREMENT_PREFERRED, WEBAUTHN_ATTESTATION_CONVEYANCE_PREFERENCE_ANY, 0, NULL, NULL};
 
 	HWND hWnd = GetForegroundWindow();
 
@@ -461,7 +464,7 @@ int sk_sign(uint32_t alg, const uint8_t *message, size_t message_len, const char
 	if (check_sign_load_resident_options(options) != 0)
 		return SSH_SK_ERR_GENERAL;
 
-	if (!(flags & SSH_SK_USER_PRESENCE_REQD))
+	if (!(flags & SSH_SK_USER_PRESENCE_REQD)) //TODO: Check when this flag is set
 	{
 		skdebug(__func__, "WinHello API does not support no-touch-required");
 		return SSH_SK_ERR_UNSUPPORTED;
