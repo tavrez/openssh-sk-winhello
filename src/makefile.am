@@ -2,6 +2,8 @@ lib_LTLIBRARIES = winhello.la
 winhello_la_SOURCES = winhello.c sk-api.h webauthn/webauthn.h
 if USE_RC
     winhello_la_SOURCES += version.rc
+version.rc: config.h
+	touch $@
 endif
 EXTRA_DIST = webauthn/LICENSE
 AM_LDFLAGS = -no-undefined -module -avoid-version -version-info 0:0:0
