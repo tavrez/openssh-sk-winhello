@@ -44,7 +44,7 @@ static void skdebug(const char *func, const char *fmt, ...)
 	va_end(ap);
 #else
 	(void)func; /* XXX */
-	(void)fmt;  /* XXX */
+	(void)fmt;	/* XXX */
 #endif
 }
 
@@ -79,13 +79,18 @@ static int init_winhello()
 	}
 	BOOL user = 0;
 	int isUserAvailable = webAuthNIsUserVerifyingPlatformAuthenticatorAvailable(&user);
-	if (webAuthNGetApiVersionNumber() >= 1 && isUserAvailable == 0 && user == 1)
+	if (webAuthNGetApiVersionNumber() < 1)
+	{
+		skdebug(__func__, "WinHello version should be 1+.\nCurrent version is: %u", webAuthNGetApiVersionNumber());
+		return -1;
+	}
+	if (isUserAvailable == 0 && user == 1)
 	{
 		loaded = 1;
 		return 0;
 	}
-	skdebug(__func__, "WinHello API Error: Version=%u, Is user available=%d, user=%d", webAuthNGetApiVersionNumber(), isUserAvailable, user);
-	return -1;
+	skdebug(__func__, "WARNING! This should not be like this!\nWinHello API Error: Version=%u, Is user available=%d, user=%d", webAuthNGetApiVersionNumber(), isUserAvailable, user);
+	return 0;
 }
 
 static int convert_byte_string(const char *oneByte, size_t size, wchar_t *twoByte)

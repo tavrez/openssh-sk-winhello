@@ -5,6 +5,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] (OpenSSH middleware API version 0x00050000) - xxxx-xx-xx
 
+## [1.0.1] (OpenSSH middleware API version 0x00050000) - 2020-07-06
+
+### Changed
+
+- Skip check for WebAuthNIsUserVerifyingPlatformAuthenticatorAvailable due to some problems(this may not fix it, it's actually for testing)
+
 ## [1.0.0] (OpenSSH middleware API version 0x00050000) - 2020-06-13
 
 ### Changed
@@ -17,6 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First version, support key generation and signing with key.
 
-[Unreleased]: https://github.com/tavrez/openssh-sk-winhello/compare/v1.0...HEAD
+[Unreleased]: https://github.com/tavrez/openssh-sk-winhello/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/tavrez/openssh-sk-winhello/compare/v1.0...v1.0.1
 [1.0.0]: https://github.com/tavrez/openssh-sk-winhello/compare/v0.1...v1.0
 [0.1.0]: https://github.com/tavrez/openssh-sk-winhello/releases/tag/v0.1
