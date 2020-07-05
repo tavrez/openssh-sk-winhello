@@ -1,7 +1,7 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 AC_PREREQ([2.69])
-AC_INIT([winhello], [1.0.1], [https://github.com/tavrez/openssh-sk-winhello/issues])
+AC_INIT([winhello], [1.0.2-dev], [https://github.com/tavrez/openssh-sk-winhello/issues])
 AC_CONFIG_SRCDIR([src/winhello.c])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIRS([m4])
@@ -10,9 +10,9 @@ AC_PREFIX_DEFAULT([/usr])
 
 AC_DEFINE([PACKAGE_VERSION_MAJOR], [1], [Major number of build])
 AC_DEFINE([PACKAGE_VERSION_MINOR], [0], [Minor number of build])
-AC_DEFINE([PACKAGE_VERSION_PATCH], [1], [Patch number of build])
-AC_DEFINE([PACKAGE_VERSION_DEV], [0], [Internal build])
-AC_DEFINE([PACKAGE_VERSION_BUILDNUMBER], [5], [Incremental number of build])
+AC_DEFINE([PACKAGE_VERSION_PATCH], [2], [Patch number of build])
+AC_DEFINE([PACKAGE_VERSION_DEV], [1], [Internal build])
+AC_DEFINE([PACKAGE_VERSION_BUILDNUMBER], [6], [Incremental number of build])
 AC_DEFINE([SK_DEBUG], [1], [Enable output messages])
 
 AM_INIT_AUTOMAKE([foreign])
