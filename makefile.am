@@ -1,3 +1,3 @@
 SUBDIRS = src
 ACLOCAL_AMFLAGS = -I m4
-EXTRA_DIST = CHANGELOG.md README.md LICENSE openssh-8.2p1-patch/ssh-sk-helper.patch
+EXTRA_DIST = CHANGELOG.md README.md INSTALL.md LICENSE openssh-8.2p1-patch/ssh-sk-helper.patch
