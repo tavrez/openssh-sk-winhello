@@ -272,7 +272,7 @@ int sk_enroll(uint32_t alg, const uint8_t *challenge, size_t challenge_len, cons
 	WEBAUTHN_RP_ENTITY_INFORMATION rpInfo = {WEBAUTHN_RP_ENTITY_INFORMATION_CURRENT_VERSION, lApplication, L"SSH", NULL};
 
 	//TODO: check user_id and email being required, check name in resident
-	WEBAUTHN_USER_ENTITY_INFORMATION userInfo = {WEBAUTHN_USER_ENTITY_INFORMATION_CURRENT_VERSION, strlen(user_id) + 1, user_id, L"ssh user", NULL, L"Name"};
+	WEBAUTHN_USER_ENTITY_INFORMATION userInfo = {WEBAUTHN_USER_ENTITY_INFORMATION_CURRENT_VERSION, strlen(user_id) + 1, user_id, user_id, NULL, L"Name"};
 
 	WEBAUTHN_COSE_CREDENTIAL_PARAMETER coseParam = {WEBAUTHN_COSE_CREDENTIAL_PARAMETER_CURRENT_VERSION, WEBAUTHN_CREDENTIAL_TYPE_PUBLIC_KEY, cose_alg};
 	WEBAUTHN_COSE_CREDENTIAL_PARAMETERS WebAuthNCredentialParameters = {1, &coseParam};
