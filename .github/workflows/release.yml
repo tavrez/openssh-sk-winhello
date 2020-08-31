@@ -20,5 +20,5 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
-          body_path: ./INSTALL.md
+          body_path: INSTALL.md
           draft: true
