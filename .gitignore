@@ -50,7 +50,6 @@ m4/ltversion.m4
 # can automatically generate from config.status script
 # (which is called by configure script))
 Makefile
-*.tar.gz
 
 # Prerequisites
 *.d
@@ -106,6 +105,8 @@ Module.symvers
 Mkfile.old
 dkms.conf
 
+# My files
+demo.gif
+*.tar.gz
 .vscode/
-bin/
 *~
