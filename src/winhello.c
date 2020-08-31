@@ -81,7 +81,7 @@ static int init_winhello()
 	int isUserAvailable = webAuthNIsUserVerifyingPlatformAuthenticatorAvailable(&user);
 	if (webAuthNGetApiVersionNumber() < 1)
 	{
-		skdebug(__func__, "WinHello version should be 1+.\nCurrent version is: %u", webAuthNGetApiVersionNumber());
+		skdebug(__func__, "WinHello version should be v1.0+.\nCurrent version is: %u", webAuthNGetApiVersionNumber());
 		return -1;
 	}
 	if (isUserAvailable == 0 && user == 1)
@@ -89,7 +89,10 @@ static int init_winhello()
 		loaded = 1;
 		return 0;
 	}
-	skdebug(__func__, "WARNING! This should not be like this!\nWinHello API Error: Version=%u, Is user available=%d, user=%d", webAuthNGetApiVersionNumber(), isUserAvailable, user);
+	/* FIXME: As MS said, this should not happen, but it's happening! Contacted them but got no answer...
+	 * Related issue link: https://github.com/tavrez/openssh-sk-winhello/issues/1
+	 */
+	skdebug(__func__, "WinHello API Error: Version=%u, Is user available=%d, user=%d. WARNING! This should not be like this!", webAuthNGetApiVersionNumber(), isUserAvailable, user);
 	return 0;
 }
 
@@ -268,11 +271,15 @@ int sk_enroll(uint32_t alg, const uint8_t *challenge, size_t challenge_len, cons
 		skdebug(__func__, "convert_string application failed");
 		goto out;
 	}
-	//maybe use application in friendly name?
-	WEBAUTHN_RP_ENTITY_INFORMATION rpInfo = {WEBAUTHN_RP_ENTITY_INFORMATION_CURRENT_VERSION, lApplication, L"SSH", NULL};
+	WEBAUTHN_RP_ENTITY_INFORMATION rpInfo = {WEBAUTHN_RP_ENTITY_INFORMATION_CURRENT_VERSION, lApplication, lApplication, NULL};
 
-	//TODO: check user_id and email being required, check name in resident
-	WEBAUTHN_USER_ENTITY_INFORMATION userInfo = {WEBAUTHN_USER_ENTITY_INFORMATION_CURRENT_VERSION, strlen(user_id) + 1, user_id, L"ssh user", NULL, L"Name"};
+	wchar_t lUserId[32] = L"SSH User";
+	if (strcmp(user_id, "") && (convert_byte_string(user_id, strlen(user_id) + 1, lUserId) <= 0))
+	{
+		skdebug(__func__, "convert_string user_id failed");
+		goto out;
+	}
+	WEBAUTHN_USER_ENTITY_INFORMATION userInfo = {WEBAUTHN_USER_ENTITY_INFORMATION_CURRENT_VERSION, strlen(user_id) + 1, user_id, lUserId, NULL, lUserId};
 
 	WEBAUTHN_COSE_CREDENTIAL_PARAMETER coseParam = {WEBAUTHN_COSE_CREDENTIAL_PARAMETER_CURRENT_VERSION, WEBAUTHN_CREDENTIAL_TYPE_PUBLIC_KEY, cose_alg};
 	WEBAUTHN_COSE_CREDENTIAL_PARAMETERS WebAuthNCredentialParameters = {1, &coseParam};
@@ -469,7 +476,7 @@ int sk_sign(uint32_t alg, const uint8_t *message, size_t message_len, const char
 	if (check_sign_load_resident_options(options) != 0)
 		return SSH_SK_ERR_GENERAL;
 
-	if (!(flags & SSH_SK_USER_PRESENCE_REQD)) //TODO: Check when this flag is set
+	if (!(flags & SSH_SK_USER_PRESENCE_REQD)) //Never set as far as I've tested
 	{
 		skdebug(__func__, "WinHello API does not support no-touch-required");
 		return SSH_SK_ERR_UNSUPPORTED;
