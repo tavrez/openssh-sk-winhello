@@ -1,4 +1,4 @@
-# OpenSSH SK WinHello [![Release](https://img.shields.io/github/v/release/tavrez/openssh-sk-winhello?include_prereleases)](https://github.com/tavrez/openssh-sk-winhello/releases) ![Platform](https://img.shields.io/badge/platform-win32%20%7C%20win64-blue) [![License](https://img.shields.io/github/license/tavrez/openssh-sk-winhello)](https://github.com/tavrez/openssh-sk-winhello/blob/master/LICENSE)
+# OpenSSH SK WinHello [![Release](https://img.shields.io/github/v/release/tavrez/openssh-sk-winhello)](https://github.com/tavrez/openssh-sk-winhello/releases) ![Platform](https://img.shields.io/badge/platform-win32%20%7C%20win64-blue) [![License](https://img.shields.io/github/license/tavrez/openssh-sk-winhello)](https://github.com/tavrez/openssh-sk-winhello/blob/master/LICENSE)
 
 A plugin for OpenSSH to connect to FIDO/U2F security keys through native Windows Hello APIs.
 ![demo](https://user-images.githubusercontent.com/9096461/79240813-7d887100-7e87-11ea-836b-2d6b6931b593.gif)
@@ -29,7 +29,7 @@ For other environments like Cygwin please download the source code and compile i
 
 ### winhello.dll
 
-Copy this file wherever you want, PATH or LIB directory is preferred(e.g. `/usr/bin`).
+Copy this file wherever you want, `/usr/lib` directory is preferred.
 
 ### Configure OpenSSH to use winhello
 
@@ -48,20 +48,19 @@ For use in `ssh-keygen` use `-w` argument like this:
 ssh-keygen -t ecdsa-sk -w winhello.dll
 ```
 
-And for use in `ssh-add` use `-S` command:
+And for use in `ssh-add` use `-S` command(If you do not use full path in `ssh-add`, `ssh-agent` may block you):
 
 ```bash
-ssh-add -S winhello.dll ~/.ssh/id_ecdsa_sk
+ssh-add -S /usr/lib/winhello.dll ~/.ssh/id_ecdsa_sk
 ```
 
-You can also set `SSH_SK_PROVIDER` environment variable for `ssh-keygen` and `ssh-add` instead of argument method explained above, for example:
+You can also set `SSH_SK_PROVIDER` environment variable in your shell init code for `ssh-keygen` and `ssh-add` instead of argument method explained above. For example if you are using bash, add this line in `~/.bashrc` file:
 
 ```bash
-SSH_SK_PROVIDER=winhello.dll ssh-keygen -t ecdsa-sk
-SSH_SK_PROVIDER=winhello.dll ssh-add ~/.ssh/id_ecdsa_sk
+export SSH_SK_PROVIDER=/usr/lib/winhello.dll
 ```
 
-Use full path to `winhello.dll` if it's not in bin or lib folders or if you get "file not found" error.
+Use the full path to `winhello.dll` or `ssh-agent` will probably refuse to add your key.
 
 ## Building
 
@@ -95,18 +94,17 @@ I've changed `ssh-sk.c` and removed hashing from it and moved it to `sk-usbhid.c
 
 ### Installing ssh-sk-helper.exe
 
-Copy `ssh-sk-helper.exe` into `/usr/lib/ssh`. You can either rename the original file in that directory or rename this one into something else before copying.
-Remember if you just replace the original `ssh-sk-helper.exe` it might be replaced with the original one later when you update your components(i.e. with MinGW updater, pacman, Cygwin updater, or updating "Git for Windows"). Also always create a backup of original components if you are going to replace them.
+Copy the uploaded `ssh-sk-helper.exe` into `/usr/lib/ssh`. You should rename the original file in that directory before copying this one.
 
 ### Setup ssh-sk-helper.exe
 
-If `/usr/lib/ssh/ssh-sk-helper.exe` is not the one required for this project(i.e. you installed the provided/compiled `ssh-sk-helper` under a different name or you want to use the original one in some cases) use `SSH_SK_HELPER` environment variable to call it whenever you want to use this projects module:
+Use the `SSH_SK_HELPER` environment variable to call the modified helper whenever you want to use this projects module:
 
 ```bash
 SSH_SK_HELPER=/usr/lib/ssh/custom_ssh-sk-helper.exe ssh ...
 ```
 
-You can also set this environment variable in your shell init code(e.g. if you are using bash, add in `~/.bashrc` file)
+Or just add this into your shell init file:
 
 ```bash
 export SSH_SK_HELPER=/usr/lib/ssh/custom_ssh-sk-helper.exe
@@ -127,7 +125,7 @@ After that, just copy `ssh-sk-helper` and use it on your main installation of Op
 ## Limitations
 
 - This module doesn't support `no-touch-required` option due to its support not available in Windows Hello APIs.
-- Windows Hello API does not support empty user ID, so if you do not specify any user ID(using `-O user` option) this module uses a default user ID `ssh user`, this behavior is different from the internal implementation which uses empty user ID.
+- Windows Hello API does not support empty user ID, so if you do not specify any user ID(using `-O user=myusername` option) this module uses a default user ID `SSH User`, this behavior is different from the internal implementation which uses empty user ID.
 - Support for copying resident keys from security key is not available(yet), use internal implementation for this(do not add `-w` to `ssh-key` or `-S` to `ssh-add` or use the word `internal` as the path to middleware):
 
     ```bash
@@ -135,7 +133,7 @@ After that, just copy `ssh-sk-helper` and use it on your main installation of Op
     ssh-add -K
     OR
     ssh-keygen -K -w internal
-    SSH_SK_PROVIDER=internal ssh-add -K
+    ssh-add -K -S internal
     ```
 
     Be sure that you are running bash as administrator whenever you use internal implementation or you get "Device not found" error.
