@@ -5,6 +5,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] (OpenSSH middleware API version 0x00050000) - xxxx-xx-xx
 
+## [1.0.2] (OpenSSH middleware API version 0x00050000) - 2020-09-01
+
+### Changed
+
+- Fine tuned some of output debug messages.
+
+### Fixed
+
+- `user_id` wasn't set properly([#4](https://github.com/tavrez/openssh-sk-winhello/issues/4)).
+
 ## [1.0.1] (OpenSSH middleware API version 0x00050000) - 2020-07-06
 
 ### Changed
@@ -23,7 +33,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First version, support key generation and signing with key.
 
-[Unreleased]: https://github.com/tavrez/openssh-sk-winhello/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/tavrez/openssh-sk-winhello/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/tavrez/openssh-sk-winhello/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/tavrez/openssh-sk-winhello/compare/v1.0...v1.0.1
 [1.0.0]: https://github.com/tavrez/openssh-sk-winhello/compare/v0.1...v1.0
 [0.1.0]: https://github.com/tavrez/openssh-sk-winhello/releases/tag/v0.1

@@ -6,7 +6,7 @@
 #define _V2S(M,N,P,B) #M "." #N "." #P "." #B
 #define VERSION2STR(M,N,P,B) _V2S(M,N,P,B)
 
-#if PACKAGE_VERSION_MAJOR <= 0
+#if PACKAGE_VERSION_PRE > 0
 #define PRERELEASE 0x2L
 #else
 #define PRERELEASE 0x0L
@@ -43,7 +43,7 @@ BEGIN
 	VALUE "LegalCopyright",   "LGPLv3"
 	VALUE "LegalTrademarks",  ""
 	VALUE "OriginalFilename", "winhello.dll"
-	VALUE "ProductName",      "OpenSSH WinHello_SK"
+	VALUE "ProductName",      "OpenSSH SK WinHello"
 	VALUE "ProductVersion",   VERSION2STR(PACKAGE_VERSION_MAJOR, PACKAGE_VERSION_MINOR, PACKAGE_VERSION_PATCH, PACKAGE_VERSION_BUILDNUMBER)
   END
 END
