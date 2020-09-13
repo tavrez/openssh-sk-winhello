@@ -35,7 +35,7 @@ Copy this file wherever you want, `/usr/lib` directory is preferred.
 
 `ssh`, `ssh-keygen`, `ssh-add` can use this module(`sshd` could also use security keys but it's a little weird to do so).
 
-To use in `ssh` open `ssh_config`(normally in `/etc/ssh`) and add this:
+To use in `ssh` open local config file `~/.ssh/config`(or global config `/etc/ssh/ssh_config`) and add this:
 
 ```ssh_config
 Host *
