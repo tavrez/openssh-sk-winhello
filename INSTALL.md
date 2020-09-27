@@ -3,8 +3,6 @@
 these files are compiled for the MSYS environment([Git for Windows](https://gitforwindows.org) is using MSYS).
 For other environments like Cygwin please refer to [README](https://github.com/tavrez/openssh-sk-winhello/blob/master/README.md#building) file to learn how to download the source code and compile it.
 
-**Note:** If you are using OpenSSH version 8.2p1, you need to install and configure(or compile) a modified [`ssh-sk-helper`](https://github.com/tavrez/openssh-sk-winhello/blob/master/README.md#ssh-sk-helper), if you are using OpenSSH 8.3p1 or higher, it's not needed.
-
 ## winhello.dll
 
 Copy this file wherever you want, `/usr/lib` directory is preferred.

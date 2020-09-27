@@ -25,8 +25,6 @@ So I created this middleware module for OpenSSH to access FIDO/U2F keys through 
 Compiled files of this project are available on GitHub releases. It is compiled for the MSYS environment([Git for Windows](https://gitforwindows.org) is using MSYS).
 For other environments like Cygwin please download the source code and compile it yourself.
 
-**Note:** If you are using OpenSSH version 8.2p1, you need to install and configure(or compile) a modified [`ssh-sk-helper`](#ssh-sk-helper), if you are using OpenSSH 8.3p1 or higher, it's not needed.
-
 ### winhello.dll
 
 Copy this file wherever you want, `/usr/lib` directory is preferred.
@@ -80,47 +78,6 @@ make
 ```
 
 `make install` will copy the DLL file properly into `/usr/lib` but it also copies some static files for linking, those files are not needed because OpenSSH will use `dlopen` to access to middlewares.
-
-## ssh-sk-helper
-
-Due to some limitations in the version 8.2p1 of OpenSSH, to use this project you need to change some code inside OpenSSH `ssh-sk-helper` binary(more detail about this on the next part).
-The patch to these changes is available in this repository, also a binary version is provided.
-This modified `ssh-sk-helper` functionality is the same and you won't fill any differences when using it unless you want to use another module that expects the original interface.
-
-### Technical Info
-
-`ssh-sk-helper` hash the challenge before it sends it to the module, so in `sk_enroll` and `sk_sign` functions received challenge is hashed, but Windows requires receiving the plain challenge and hash it by itself, so currently we will hash data two times which cause failure in server verification.
-I've changed `ssh-sk.c` and removed hashing from it and moved it to `sk-usbhid.c` and bumped API version to prevent other modules expecting original implementation to connect.
-
-### Installing ssh-sk-helper.exe
-
-Copy the uploaded `ssh-sk-helper.exe` into `/usr/lib/ssh`. You should rename the original file in that directory before copying this one.
-
-### Setup ssh-sk-helper.exe
-
-Use the `SSH_SK_HELPER` environment variable to call the modified helper whenever you want to use this projects module:
-
-```bash
-SSH_SK_HELPER=/usr/lib/ssh/custom_ssh-sk-helper.exe ssh ...
-```
-
-Or just add this into your shell init file:
-
-```bash
-export SSH_SK_HELPER=/usr/lib/ssh/custom_ssh-sk-helper.exe
-```
-
-### Builing ssh-sk-helper
-
-Download OpenSSH 8.2p1 source code and apply the provided patch to it:
-
-```bash
-cd openssh-source
-patch -p1 < ssh-sk-helper.patch
-```
-
-Then compile it according to your environment instructions.
-After that, just copy `ssh-sk-helper` and use it on your main installation of OpenSSH.
 
 ## Limitations
 
