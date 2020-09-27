@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 
 - Variable cleanup in an error handling case.
+- Bug fixes.
 
 ## [1.0.2] (OpenSSH middleware API version 0x00050000) - 2020-09-01
 
@@ -23,7 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Skip check for WebAuthNIsUserVerifyingPlatformAuthenticatorAvailable due to some problems(this may not fix it, it's actually for testing)
+- Skip check for WebAuthNIsUserVerifyingPlatformAuthenticatorAvailable due to some problems(this may not fix it, it's actually for testing).
 
 ## [1.0.0] (OpenSSH middleware API version 0x00050000) - 2020-06-13
 

@@ -1,4 +1,4 @@
-# OpenSSH SK WinHello [![Release](https://img.shields.io/github/v/release/tavrez/openssh-sk-winhello)](https://github.com/tavrez/openssh-sk-winhello/releases) ![Platform](https://img.shields.io/badge/platform-win32%20%7C%20win64-blue) [![License](https://img.shields.io/github/license/tavrez/openssh-sk-winhello)](https://github.com/tavrez/openssh-sk-winhello/blob/master/LICENSE)
+# OpenSSH SK WinHello [![Release](https://img.shields.io/github/v/release/tavrez/openssh-sk-winhello?include_prereleases&sort=semver)](https://github.com/tavrez/openssh-sk-winhello/releases) ![Platform](https://img.shields.io/badge/platform-win32%20%7C%20win64-blue) [![License](https://img.shields.io/github/license/tavrez/openssh-sk-winhello)](https://github.com/tavrez/openssh-sk-winhello/blob/master/LICENSE)
 
 A plugin for OpenSSH to connect to FIDO/U2F security keys through native Windows Hello APIs.
 ![demo](https://user-images.githubusercontent.com/9096461/79240813-7d887100-7e87-11ea-836b-2d6b6931b593.gif)

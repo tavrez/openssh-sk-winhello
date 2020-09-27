@@ -77,18 +77,16 @@ static int init_winhello()
 		skdebug(__func__, "Cannot load functions from dll");
 		return -1;
 	}
-	BOOL user = 0;
-	int isUserAvailable = webAuthNIsUserVerifyingPlatformAuthenticatorAvailable(&user);
 	if (webAuthNGetApiVersionNumber() < 1)
 	{
 		skdebug(__func__, "WinHello version should be v1.0+.\nCurrent version is: %u", webAuthNGetApiVersionNumber());
 		return -1;
 	}
+	loaded = 1;
+	BOOL user = 0;
+	int isUserAvailable = webAuthNIsUserVerifyingPlatformAuthenticatorAvailable(&user);
 	if (isUserAvailable == 0 && user == 1)
-	{
-		loaded = 1;
 		return 0;
-	}
 	/* FIXME: As MS said, this should not happen, but it's happening! Contacted them but got no answer...
 	 * Related issue link: https://github.com/tavrez/openssh-sk-winhello/issues/1
 	 */
