@@ -5,6 +5,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] (OpenSSH middleware API version 0x00050000) - xxxx-xx-xx
 
+### Fixed
+
+- Variable cleanup in an error handling case.
+
 ## [1.0.2] (OpenSSH middleware API version 0x00050000) - 2020-09-01
 
 ### Changed

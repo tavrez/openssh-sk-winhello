@@ -542,7 +542,7 @@ int sk_sign(uint32_t alg, const uint8_t *message, size_t message_len, const char
 	if (pack_sig(alg, pWebAuthNAssertion->pbSignature, pWebAuthNAssertion->cbSignature, response) != 0)
 	{
 		skdebug(__func__, "pack_sig failed");
-		return -1;
+		goto out;
 	}
 
 	*sign_response = response;
