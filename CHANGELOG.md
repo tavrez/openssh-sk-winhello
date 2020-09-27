@@ -33,7 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - First version, support key generation and signing with key.
 
-[Unreleased]: https://github.com/tavrez/openssh-sk-winhello/compare/v1.0.2...HEAD
+[Unreleased]: https://github.com/tavrez/openssh-sk-winhello/compare/v1.0.2...v1
 [1.0.2]: https://github.com/tavrez/openssh-sk-winhello/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/tavrez/openssh-sk-winhello/compare/v1.0...v1.0.1
 [1.0.0]: https://github.com/tavrez/openssh-sk-winhello/compare/v0.1...v1.0
