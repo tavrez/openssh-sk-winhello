@@ -77,18 +77,16 @@ static int init_winhello()
 		skdebug(__func__, "Cannot load functions from dll");
 		return -1;
 	}
-	BOOL user = 0;
-	int isUserAvailable = webAuthNIsUserVerifyingPlatformAuthenticatorAvailable(&user);
 	if (webAuthNGetApiVersionNumber() < 1)
 	{
 		skdebug(__func__, "WinHello version should be v1.0+.\nCurrent version is: %u", webAuthNGetApiVersionNumber());
 		return -1;
 	}
+	loaded = 1;
+	BOOL user = 0;
+	int isUserAvailable = webAuthNIsUserVerifyingPlatformAuthenticatorAvailable(&user);
 	if (isUserAvailable == 0 && user == 1)
-	{
-		loaded = 1;
 		return 0;
-	}
 	/* FIXME: As MS said, this should not happen, but it's happening! Contacted them but got no answer...
 	 * Related issue link: https://github.com/tavrez/openssh-sk-winhello/issues/1
 	 */
@@ -286,7 +284,7 @@ int sk_enroll(uint32_t alg, const uint8_t *challenge, size_t challenge_len, cons
 
 	WEBAUTHN_CLIENT_DATA WebAuthNClientData = {WEBAUTHN_CLIENT_DATA_CURRENT_VERSION, challenge_len, (uint8_t *)challenge, WEBAUTHN_HASH_ALGORITHM_SHA_256};
 
-	WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS WebAuthNCredentialOptions = {WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_CURRENT_VERSION, 60000, {0, NULL}, {0, NULL}, WEBAUTHN_AUTHENTICATOR_ATTACHMENT_ANY, flags & SSH_SK_RESIDENT_KEY, WEBAUTHN_USER_VERIFICATION_REQUIREMENT_PREFERRED, WEBAUTHN_ATTESTATION_CONVEYANCE_PREFERENCE_ANY, 0, NULL, NULL};
+	WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS WebAuthNCredentialOptions = {WEBAUTHN_AUTHENTICATOR_MAKE_CREDENTIAL_OPTIONS_CURRENT_VERSION, 60000, {0, NULL}, {0, NULL}, WEBAUTHN_AUTHENTICATOR_ATTACHMENT_ANY, flags & SSH_SK_RESIDENT_KEY, (flags & SSH_SK_USER_VERIFICATION_REQD) ? WEBAUTHN_USER_VERIFICATION_REQUIREMENT_REQUIRED : WEBAUTHN_USER_VERIFICATION_REQUIREMENT_DISCOURAGED, WEBAUTHN_ATTESTATION_CONVEYANCE_PREFERENCE_ANY, 0, NULL, NULL};
 
 	HWND hWnd = GetForegroundWindow();
 
@@ -508,7 +506,7 @@ int sk_sign(uint32_t alg, const uint8_t *message, size_t message_len, const char
 	WEBAUTHN_CREDENTIAL_EX *pCredential = &credential;
 	WEBAUTHN_CREDENTIAL_LIST allowCredentialList = {1, &pCredential};
 	BOOL pbU2fAppId = FALSE;
-	WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS WebAuthNAssertionOptions = {WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_CURRENT_VERSION, 60000, {0, NULL}, {0, NULL}, WEBAUTHN_AUTHENTICATOR_ATTACHMENT_ANY, WEBAUTHN_USER_VERIFICATION_REQUIREMENT_PREFERRED, 0, NULL, &pbU2fAppId, NULL, &allowCredentialList};
+	WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS WebAuthNAssertionOptions = {WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_CURRENT_VERSION, 60000, {0, NULL}, {0, NULL}, WEBAUTHN_AUTHENTICATOR_ATTACHMENT_ANY, (flags & SSH_SK_USER_VERIFICATION_REQD) ? WEBAUTHN_USER_VERIFICATION_REQUIREMENT_REQUIRED : WEBAUTHN_USER_VERIFICATION_REQUIREMENT_DISCOURAGED, 0, NULL, &pbU2fAppId, NULL, &allowCredentialList};
 
 	HRESULT hr = webAuthNAuthenticatorGetAssertion(hWnd, lApplication, &WebAuthNClientData, &WebAuthNAssertionOptions, &pWebAuthNAssertion);
 	if (hr != S_OK)
@@ -542,7 +540,7 @@ int sk_sign(uint32_t alg, const uint8_t *message, size_t message_len, const char
 	if (pack_sig(alg, pWebAuthNAssertion->pbSignature, pWebAuthNAssertion->cbSignature, response) != 0)
 	{
 		skdebug(__func__, "pack_sig failed");
-		return -1;
+		goto out;
 	}
 
 	*sign_response = response;

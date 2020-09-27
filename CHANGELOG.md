@@ -3,7 +3,15 @@
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [Unreleased] (OpenSSH middleware API version 0x00050000) - xxxx-xx-xx
+## [Unreleased] (OpenSSH middleware API version 7) - xxxx-xx-xx
+
+### Added
+
+- Support for verify-required is added.
+
+### Changed
+
+- Bumped API version to 0x00070000 (requires OpenSSH v8.4p1)
 
 ## [1.0.2] (OpenSSH middleware API version 0x00050000) - 2020-09-01
 
