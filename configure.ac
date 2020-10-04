@@ -15,6 +15,7 @@ AC_DEFINE([PACKAGE_VERSION_DEV], [1], [Internal build])
 AC_DEFINE([PACKAGE_VERSION_PRE], [0], [Pre-release build])
 AC_DEFINE([PACKAGE_VERSION_BUILDNUMBER], [7], [Incremental number of build])
 AC_DEFINE([SK_DEBUG], [1], [Enable output messages])
+AC_DEFINE([NOCRYPT], [], [Prevent Windows crypto library from being loaded])
 
 AM_INIT_AUTOMAKE([foreign])
 LT_INIT([win32-dll disable-static])
