@@ -59,12 +59,14 @@ jobs:
           release_name: Release ${{ github.ref }}
           body: |
             This release is for version 8.2 and 8.3 of OpenSSH.
-            Check [install](https://github.com/tavrez/openssh-sk-winhello/blob/v1/README.md#install) for installation guide.
+            [Installation guide](https://github.com/tavrez/openssh-sk-winhello/blob/v1/README.md#install).
           draft: true
           commitish: v1
 
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./tarball/${{ env.TARNAME }}
@@ -73,6 +75,8 @@ jobs:
 
       - name: Upload Binary Asset
         uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./binary/winhello.dll
@@ -83,6 +87,8 @@ jobs:
 
       - name: Upload Binary Asset
         uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: v8.2p1-ssh-sk-helper.exe
