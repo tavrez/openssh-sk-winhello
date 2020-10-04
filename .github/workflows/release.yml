@@ -1,17 +1,54 @@
+name: Release
+
 on:
   push:
     tags:
-      - "v*"
-
-name: Create Release
+      - 'v*'
 
 jobs:
   build:
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - name: Setup MSYS2
+        uses: msys2/setup-msys2@v2
+        with:
+          msystem: MSYS
+          install: 'base-devel gcc openssl-devel'
+
+      - uses: actions/checkout@v2
+
+      - run: autoreconf --install
+
+      - run: ./configure
+
+      - run: make
+
+      - run: make dist
+
+      - name: Upload tarball
+        uses: actions/upload-artifact@v2
+        with:
+          name: tarball
+          path: winhello-*.tar.gz
+
+      - name: Upload binary
+        uses: actions/upload-artifact@v2
+        with:
+          name: binary
+          path: src/.libs/winhello.dll
+
+  release:
     name: Create Release
+    needs: build
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/download-artifact@v2
+
+      - run: echo "::set-env name=TARNAME::`ls ./tarball`"
+
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
@@ -20,5 +57,24 @@ jobs:
         with:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
-          body_path: INSTALL.md
+          body: |
+            This release is for version 8.4 of OpenSSH
+            Check [install](https://github.com/tavrez/openssh-sk-winhello/blob/master/README.md#install) for installation guide and versions supporting older release of OpenSSH
           draft: true
+          commitish: master
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./tarball/${{ env.TARNAME }}
+          asset_name: ${{ env.TARNAME }}
+          asset_content_type: application/gzip
+
+      - name: Upload Binary Asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./binary/winhello.dll
+          asset_name: winhello.dll
+          asset_content_type: application/octet-stream
