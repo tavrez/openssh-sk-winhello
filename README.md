@@ -48,8 +48,7 @@ For other environments like Cygwin please download the source code and compile i
                 SecurityKeyProvider winhello.dll
             ```
 
-            Or:
-        - Use `-oSecurityKeyProvider` every time you use `ssh` command:
+        - Or use `-oSecurityKeyProvider` every time you use `ssh` command:
 
             ```bash
             ssh -oSecurityKeyProvider=winhello.dll user@host
@@ -65,14 +64,14 @@ For other environments like Cygwin please download the source code and compile i
 
             Use absolute path to `winhello.dll` or `ssh-agent` will refuse to add your key.
 
-        - Set it on every call:
+        - Or set it on every call:
 
             ```bash
             SSH_SK_PROVIDER=winhello.dll ssh-keygen -t  ecdsa-sk
             SSH_SK_PROVIDER=winhello.dll ssh-add ~/.ssh/id_ecdsa_sk
             ```
 
-        - Use argument like this:
+        - Or use argument like this:
 
             ```bash
             ssh-keygen -w winhello.dll -t ecdsa-sk
@@ -118,7 +117,7 @@ Before version 1.1.0 of this module, it would have prevented you from creating o
 
 By using `-O resident` you can make your key stored inside your security key(it should be FIDO2 compatible). With this, when you want to use your key on a new machine, you don't need to transfer your private/public key files. You can simply run `ssh-keygen -K` command and it will regenerate same private/public keys on new machine.
 
-Using this module can generate these type of keys, but it doesn't support copying resident keys. You need to do it with internal module of OpenSSH. Check [known issues](#Known%20issues%20and%20limitations) for more info.
+Using this module can generate these type of keys, but it doesn't support copying resident keys. You need to do it with internal module of OpenSSH. Check [known issues](#Known-issues-and-limitations) for more info.
 
 ### credProt Extension
 
@@ -148,7 +147,7 @@ Windows Hello automatically find your device, so this is not needed and not supp
 
 use `-O attestation=/path/to/newfile` to store attestation data created.
 
-- Check [Limitaions](#Known%20issues%20and%20limitations).
+- Check [Limitaions](#Known-issues-and-limitations).
 
 ## Use inside WSL
 
