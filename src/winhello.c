@@ -1,9 +1,14 @@
-#include <stdint.h>
+#ifdef HAVE_CONFIG_H
+#include "config.h"
+#endif //HAVE_CONFIG_H
+
+#define WIN32_LEAN_AND_MEAN
+
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #include <wchar.h>
 #include <string.h>
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <openssl/evp.h>
 #include <openssl/bn.h>
@@ -11,9 +16,6 @@
 
 #include "sk-api.h"
 #include "webauthn/webauthn.h"
-#ifdef HAVE_CONFIG_H
-#include "config.h"
-#endif //HAVE_CONFIG_H
 
 typedef DWORD (*TWebAuthNGetApiVersionNumber)();
 typedef HRESULT (*TWebAuthNIsUserVerifyingPlatformAuthenticatorAvailable)(BOOL *);
@@ -79,7 +81,7 @@ static int init_winhello()
 	}
 	if (webAuthNGetApiVersionNumber() < 1)
 	{
-		skdebug(__func__, "WinHello version should be v1.0+.\nCurrent version is: %u", webAuthNGetApiVersionNumber());
+		skdebug(__func__, "WinHello version should be v1.0+. Current version is: %u", webAuthNGetApiVersionNumber());
 		return -1;
 	}
 	loaded = 1;
@@ -90,7 +92,7 @@ static int init_winhello()
 	/* FIXME: As MS said, this should not happen, but it's happening! Contacted them but got no answer...
 	 * Related issue link: https://github.com/tavrez/openssh-sk-winhello/issues/1
 	 */
-	skdebug(__func__, "WinHello API Error: Version=%u, Is user available=%d, user=%d. WARNING! This should not be like this!", webAuthNGetApiVersionNumber(), isUserAvailable, user);
+	skdebug(__func__, "WARNING! This should not be like this! WinHello API Error: Is user available=%d, User=%d.", isUserAvailable, user);
 	return 0;
 }
 
@@ -247,10 +249,7 @@ int sk_enroll(uint32_t alg, const uint8_t *challenge, size_t challenge_len, cons
 	}
 
 	if (!(flags & SSH_SK_USER_PRESENCE_REQD))
-	{
-		skdebug(__func__, "WinHello API does not support no-touch-required");
-		return SSH_SK_ERR_UNSUPPORTED;
-	}
+		skdebug(__func__, "WinHello API does not support no-touch-required, you can interact with your key to continue normally");
 
 	if (init_winhello() != 0)
 		return SSH_SK_ERR_UNSUPPORTED;
@@ -474,11 +473,8 @@ int sk_sign(uint32_t alg, const uint8_t *message, size_t message_len, const char
 	if (check_sign_load_resident_options(options) != 0)
 		return SSH_SK_ERR_GENERAL;
 
-	if (!(flags & SSH_SK_USER_PRESENCE_REQD)) //Never set as far as I've tested
-	{
-		skdebug(__func__, "WinHello API does not support no-touch-required");
-		return SSH_SK_ERR_UNSUPPORTED;
-	}
+	if (!(flags & SSH_SK_USER_PRESENCE_REQD))
+		skdebug(__func__, "WinHello API does not support no-touch-required, you can interact with your key to continue normally");
 
 	if (init_winhello() != 0)
 		return SSH_SK_ERR_UNSUPPORTED;
@@ -502,11 +498,10 @@ int sk_sign(uint32_t alg, const uint8_t *message, size_t message_len, const char
 
 	WEBAUTHN_CLIENT_DATA WebAuthNClientData = {WEBAUTHN_CLIENT_DATA_CURRENT_VERSION, message_len, (uint8_t *)message, WEBAUTHN_HASH_ALGORITHM_SHA_256};
 
-	WEBAUTHN_CREDENTIAL_EX credential = {WEBAUTHN_CREDENTIAL_EX_CURRENT_VERSION, key_handle_len, (uint8_t *)key_handle, WEBAUTHN_CREDENTIAL_TYPE_PUBLIC_KEY, WEBAUTHN_CTAP_TRANSPORT_FLAGS_MASK};
-	WEBAUTHN_CREDENTIAL_EX *pCredential = &credential;
-	WEBAUTHN_CREDENTIAL_LIST allowCredentialList = {1, &pCredential};
 	BOOL pbU2fAppId = FALSE;
-	WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS WebAuthNAssertionOptions = {WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_CURRENT_VERSION, 60000, {0, NULL}, {0, NULL}, WEBAUTHN_AUTHENTICATOR_ATTACHMENT_ANY, WEBAUTHN_USER_VERIFICATION_REQUIREMENT_PREFERRED, 0, NULL, &pbU2fAppId, NULL, &allowCredentialList};
+	WEBAUTHN_CREDENTIAL credential = {WEBAUTHN_CREDENTIAL_CURRENT_VERSION, key_handle_len, (uint8_t *)key_handle, WEBAUTHN_CREDENTIAL_TYPE_PUBLIC_KEY};
+	WEBAUTHN_CREDENTIALS allowCredentialList = {1, &credential};
+	WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS WebAuthNAssertionOptions = {WEBAUTHN_AUTHENTICATOR_GET_ASSERTION_OPTIONS_CURRENT_VERSION, 60000, allowCredentialList, {0, NULL}, WEBAUTHN_AUTHENTICATOR_ATTACHMENT_ANY, WEBAUTHN_USER_VERIFICATION_REQUIREMENT_PREFERRED, 0, NULL, &pbU2fAppId, NULL, NULL};
 
 	HRESULT hr = webAuthNAuthenticatorGetAssertion(hWnd, lApplication, &WebAuthNClientData, &WebAuthNAssertionOptions, &pWebAuthNAssertion);
 	if (hr != S_OK)
