@@ -58,13 +58,15 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
           body: |
-            This release is for version 8.4 of OpenSSH
-            Check [install](https://github.com/tavrez/openssh-sk-winhello/blob/master/README.md#install) for installation guide and versions supporting older release of OpenSSH
+            This release is for version 8.4 of OpenSSH,
+            [Installation guide](https://github.com/tavrez/openssh-sk-winhello/blob/master/README.md#install).
           draft: true
           commitish: master
 
       - name: Upload Release Asset
         uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./tarball/${{ env.TARNAME }}
@@ -73,6 +75,8 @@ jobs:
 
       - name: Upload Binary Asset
         uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
           asset_path: ./binary/winhello.dll
