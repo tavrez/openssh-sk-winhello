@@ -351,9 +351,15 @@ int sk_enroll(uint32_t alg, const uint8_t *challenge, size_t challenge_len, cons
 			response->signature_len = att->cbSignature;
 			memcpy(response->signature, att->pbSignature, att->cbSignature);
 
-			// TODO: authentication data
-			response->authdata = NULL;
-			response->authdata_len = 0;
+			if ((response->authdata = calloc(1, pWebAuthNCredentialAttestation->cbAuthenticatorData + 2)) == NULL)
+			{
+				skdebug(__func__, "calloc authdata failed");
+				goto out;
+			}
+			response->authdata_len = pWebAuthNCredentialAttestation->cbAuthenticatorData + 2;
+			response->authdata[0] = 0x58;
+			response->authdata[1] = pWebAuthNCredentialAttestation->cbAuthenticatorData;
+			memcpy(response->authdata + 2, pWebAuthNCredentialAttestation->pbAuthenticatorData, pWebAuthNCredentialAttestation->cbAuthenticatorData);
 		}
 	}
 	*enroll_response = response;
