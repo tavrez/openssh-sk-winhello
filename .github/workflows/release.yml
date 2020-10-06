@@ -58,7 +58,7 @@ jobs:
           tag_name: ${{ github.ref }}
           release_name: Release ${{ github.ref }}
           body: |
-            This release is for version 8.4 of OpenSSH,
+            This release is for version 8.4 of OpenSSH.
             [Installation guide](https://github.com/tavrez/openssh-sk-winhello/blob/master/README.md#install).
           draft: true
           commitish: master
