@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased] (OpenSSH middleware API version 7) - xxxx-xx-xx
 
+## [2.0.0] (OpenSSH middleware API version 7) - 2020-10-06
+
 ### Added
 
 - You can now create and use keys created with `no-touch-required` option.
@@ -20,5 +22,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - [Branch v1 changelog](https://github.com/tavrez/openssh-sk-winhello/blob/v1/CHANGELOG.md).
 
-[Unreleased]: https://github.com/tavrez/openssh-sk-winhello/compare/v1.0.2...HEAD
+[Unreleased]: https://github.com/tavrez/openssh-sk-winhello/compare/v2.0.0...HEAD
+[2.0.0]: https://github.com/tavrez/openssh-sk-winhello/compare/v1.0.2...v2.0.0
 [v1]: https://github.com/tavrez/openssh-sk-winhello/tree/v1
