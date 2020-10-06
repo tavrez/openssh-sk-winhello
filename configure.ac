@@ -1,7 +1,7 @@
 #                                               -*- Autoconf -*-
 # Process this file with autoconf to produce a configure script.
 AC_PREREQ([2.69])
-AC_INIT([winhello], [2.0.0-dev], [https://github.com/tavrez/openssh-sk-winhello/issues])
+AC_INIT([winhello], [2.0.0], [https://github.com/tavrez/openssh-sk-winhello/issues])
 AC_CONFIG_SRCDIR([src/winhello.c])
 AC_CONFIG_AUX_DIR([build-aux])
 AC_CONFIG_MACRO_DIRS([m4])
@@ -11,9 +11,9 @@ AC_PREFIX_DEFAULT([/usr])
 AC_DEFINE([PACKAGE_VERSION_MAJOR], [2], [Major number of build])
 AC_DEFINE([PACKAGE_VERSION_MINOR], [0], [Minor number of build])
 AC_DEFINE([PACKAGE_VERSION_PATCH], [0], [Patch number of build])
-AC_DEFINE([PACKAGE_VERSION_DEV], [1], [Internal build])
+AC_DEFINE([PACKAGE_VERSION_DEV], [0], [Internal build])
 AC_DEFINE([PACKAGE_VERSION_PRE], [0], [Pre-release build])
-AC_DEFINE([PACKAGE_VERSION_BUILDNUMBER], [7], [Incremental number of build])
+AC_DEFINE([PACKAGE_VERSION_BUILDNUMBER], [8], [Incremental number of build])
 AC_DEFINE([SK_DEBUG], [1], [Enable output messages])
 AC_DEFINE([NOCRYPT], [], [Prevent Windows crypto library from being loaded])
 
