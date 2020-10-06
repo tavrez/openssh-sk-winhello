@@ -18,15 +18,20 @@ jobs:
           msystem: MSYS
           install: 'base-devel gcc openssl-devel'
 
-      - uses: actions/checkout@v2
+      - name: Checkout Code
+        uses: actions/checkout@v2
 
-      - run: autoreconf --install
+      - name: Generate Configurations
+        run: autoreconf --install
 
-      - run: ./configure
+      - name: Configure
+        run: ./configure
 
-      - run: make
+      - name: Make
+        run: make
 
-      - run: make dist
+      - name: Make Source Package
+        run: make dist
 
       - name: Upload tarball
         uses: actions/upload-artifact@v2
@@ -45,9 +50,11 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v2
+      - name: Download Artifacts
+        uses: actions/download-artifact@v2
 
-      - run: echo "::set-env name=TARNAME::`ls ./tarball`"
+      - name: Detect Source Package Name
+        run: echo "TARNAME=`ls ./tarball`" >> $GITHUB_ENV
 
       - name: Create Release
         id: create_release
