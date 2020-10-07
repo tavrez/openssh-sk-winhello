@@ -56,7 +56,7 @@ For other environments like Cygwin please download the source code and compile i
 
     1. Configure `ssh-keygen` and `ssh-add`/`ssh-agent`:
 
-        - You can set it in your shell init code instead of argument method explained above. For example if you are using Bash, add this line in `~/.bashrc` file:
+        - You can set an environment variable in your shell init code. For example if you are using Bash, add this line in `~/.bashrc` file:
 
             ```bash
             export SSH_SK_PROVIDER=/usr/lib/winhello.dll
