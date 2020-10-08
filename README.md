@@ -68,7 +68,7 @@ For other environments like Cygwin please download the source code and compile i
 
             ```bash
             SSH_SK_PROVIDER=winhello.dll ssh-keygen -t  ecdsa-sk
-            SSH_SK_PROVIDER=winhello.dll ssh-add ~/.ssh/id_ecdsa_sk
+            SSH_SK_PROVIDER=/usr/lib/winhello.dll ssh-add ~/.ssh/id_ecdsa_sk
             ```
 
         - Or use argument like this:
@@ -86,15 +86,15 @@ For other environments like Cygwin please download the source code and compile i
     - In your shell init code:
 
         ```bash
-        export SSH_SK_HELPER=/usr/lib/v8.2p1-ssh-sk-helper.exe
+        export SSH_SK_HELPER=/usr/lib/ssh/v8.2p1-ssh-sk-helper.exe
         ```
 
     - Call it with every command:
 
         ```bash
-        SSH_SK_HELPER=/usr/lib/v8.2p1-ssh-sk-helper.exe ssh user@host
-        SSH_SK_HELPER=/usr/lib/v8.2p1-ssh-sk-helper.exe ssh-keygen -t ecdsa-sk
-        SSH_SK_HELPER=/usr/lib/v8.2p1-ssh-sk-helper.exe ssh-add ~/.ssh/id_ecdsa_sk
+        SSH_SK_HELPER=/usr/lib/ssh/v8.2p1-ssh-sk-helper.exe ssh user@host
+        SSH_SK_HELPER=/usr/lib/ssh/v8.2p1-ssh-sk-helper.exe ssh-keygen -t ecdsa-sk
+        SSH_SK_HELPER=/usr/lib/ssh/v8.2p1-ssh-sk-helper.exe ssh-add ~/.ssh/id_ecdsa_sk
         ```
 
 ## Supported flags
