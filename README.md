@@ -67,7 +67,7 @@ For other environments like Cygwin please download the source code and compile i
 
             ```bash
             SSH_SK_PROVIDER=winhello.dll ssh-keygen -t  ecdsa-sk
-            SSH_SK_PROVIDER=winhello.dll ssh-add ~/.ssh/id_ecdsa_sk
+            SSH_SK_PROVIDER=/usr/lib/winhello.dll ssh-add ~/.ssh/id_ecdsa_sk
             ```
 
         - Or use argument like this:
