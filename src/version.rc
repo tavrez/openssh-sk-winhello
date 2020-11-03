@@ -38,13 +38,13 @@ BEGIN
   BEGIN
 	VALUE "CompanyName",      ""
 	VALUE "FileDescription",  "OpenSSH Windows Hello security key middleware"
-	VALUE "FileVersion",      VERSION2STR(PACKAGE_VERSION_MAJOR, PACKAGE_VERSION_MINOR, PACKAGE_VERSION_PATCH, PACKAGE_VERSION_BUILDNUMBER)
+	VALUE "FileVersion",      PACKAGE_VERSION
 	VALUE "InternalName",     "openssh_sk_winhello"
 	VALUE "LegalCopyright",   "LGPLv3"
 	VALUE "LegalTrademarks",  ""
 	VALUE "OriginalFilename", "winhello.dll"
 	VALUE "ProductName",      "OpenSSH SK WinHello"
-	VALUE "ProductVersion",   VERSION2STR(PACKAGE_VERSION_MAJOR, PACKAGE_VERSION_MINOR, PACKAGE_VERSION_PATCH, PACKAGE_VERSION_BUILDNUMBER)
+	VALUE "ProductVersion",   PACKAGE_VERSION
   END
 END
 BLOCK "VarFileInfo"
