@@ -28,9 +28,9 @@ For other environments like Cygwin please download the source code and compile i
 1. Download a version of this module which matches your installed OpenSSH Version:
     *Run `ssh -V` to detect your OpenSSH version.*
 
-    - OpenSSH v8.4: Get latest 2.x
-    - OpenSSH v8.3: Get latest 1.x
-    - OpenSSH v8.2: Get latest 1.x **and** custom `openssh-sk-helper`
+    - OpenSSH v8.4+: Get latest 2.x
+    - OpenSSH v8.3 : Get latest 1.x
+    - OpenSSH v8.2 : Get latest 1.x **and** custom `openssh-sk-helper`
 
 1. Copy files:
 
@@ -133,7 +133,7 @@ Windows Hello automatically find your device, so this is not needed and not supp
 
 use `-O attestation=/path/to/newfile` to store attestation data created.
 
-- Check [Limitaions](#Known-issues-and-limitations).
+- Check [Limitations](#Known-issues-and-limitations).
 
 ## Use inside WSL
 
