@@ -74,7 +74,7 @@ struct sk_option {
 	uint8_t required;
 };
 
-#define SSH_SK_VERSION_MAJOR		0x00070000 /* current API version */
+#define SSH_SK_VERSION_MAJOR		0x00090000 /* current API version */
 #define SSH_SK_VERSION_MAJOR_MASK	0xffff0000
 
 /* Return the version of the middleware API */
