@@ -477,7 +477,7 @@ static int pack_sig(uint32_t alg, BYTE *sign, size_t len, struct sk_sign_respons
 }
 
 /* Sign a challenge */
-int sk_sign(uint32_t alg, const uint8_t *message, size_t message_len, const char *application, const uint8_t *key_handle, size_t key_handle_len, uint8_t flags, const char *pin, struct sk_option **options, struct sk_sign_response **sign_response)
+int sk_sign(uint32_t alg, const uint8_t *data, size_t data_len, const char *application, const uint8_t *key_handle, size_t key_handle_len, uint8_t flags, const char *pin, struct sk_option **options, struct sk_sign_response **sign_response)
 {
 	struct sk_sign_response *response = NULL;
 	int ret = SSH_SK_ERR_GENERAL;
@@ -515,7 +515,7 @@ int sk_sign(uint32_t alg, const uint8_t *message, size_t message_len, const char
 		goto out;
 	}
 
-	WEBAUTHN_CLIENT_DATA WebAuthNClientData = {WEBAUTHN_CLIENT_DATA_CURRENT_VERSION, message_len, (uint8_t *)message, WEBAUTHN_HASH_ALGORITHM_SHA_256};
+	WEBAUTHN_CLIENT_DATA WebAuthNClientData = {WEBAUTHN_CLIENT_DATA_CURRENT_VERSION, data_len, (uint8_t *)data, WEBAUTHN_HASH_ALGORITHM_SHA_256};
 
 	BOOL pbU2fAppId = FALSE;
 	WEBAUTHN_CREDENTIAL credential = {WEBAUTHN_CREDENTIAL_CURRENT_VERSION, key_handle_len, (uint8_t *)key_handle, WEBAUTHN_CREDENTIAL_TYPE_PUBLIC_KEY};
