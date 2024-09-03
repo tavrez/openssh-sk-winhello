@@ -51,7 +51,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Download Artifacts
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4.1.7
 
       - name: Detect Source Package Name
         run: echo "TARNAME=`ls ./tarball`" >> $GITHUB_ENV
